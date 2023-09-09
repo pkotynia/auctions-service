@@ -1,0 +1,1 @@
+INSERT INTO auction(name) VALUES("Opla sprzedam");
