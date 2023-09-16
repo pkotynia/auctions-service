@@ -1,6 +1,8 @@
 package com.sda.auctionsservice.auctions;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +16,8 @@ public class Seller {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int sellerId;
 
+    @NotNull
+    @NotEmpty
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL)

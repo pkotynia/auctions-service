@@ -1,5 +1,6 @@
 package com.sda.auctionsservice.auctions;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +16,8 @@ public class AuctionController {
     }
 
     @PostMapping
-    public Auction postAuction(@RequestBody Auction auction) {
+    public Auction postAuction(@RequestBody @Valid Auction auction) {
+
         return repository.save(auction);
     }
 
