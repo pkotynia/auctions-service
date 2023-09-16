@@ -1,7 +1,9 @@
 package com.sda.auctionsservice.auctions;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 //Deprecated do not ever use
 
@@ -12,11 +14,17 @@ public class Auction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
+    @NotEmpty
     private String name;
 
-    private Double initialPrice;
+    @NotNull
+    @Digits(integer = 6, fraction = 2)
+    @DecimalMin(value = "0.01")
+    @DecimalMax(value = "999999.99")
+    private BigDecimal initialPrice;
 
-    private Double currentPrice;
+    private BigDecimal currentPrice;
 
     private String description;
 
@@ -24,7 +32,7 @@ public class Auction {
 
     public Auction() {}
 
-    public Auction(String name, Double initialPrice, Double currentPrice, String description, LocalDateTime endTime) {
+    public Auction(String name, BigDecimal initialPrice, BigDecimal currentPrice, String description, LocalDateTime endTime) {
         this.name = name;
         this.initialPrice = initialPrice;
         this.currentPrice = currentPrice;
@@ -48,19 +56,19 @@ public class Auction {
         this.name = name;
     }
 
-    public Double getInitialPrice() {
+    public BigDecimal getInitialPrice() {
         return initialPrice;
     }
 
-    public void setInitialPrice(Double initialPrice) {
+    public void setInitialPrice(BigDecimal initialPrice) {
         this.initialPrice = initialPrice;
     }
 
-    public Double getCurrentPrice() {
+    public BigDecimal getCurrentPrice() {
         return currentPrice;
     }
 
-    public void setCurrentPrice(Double currentPrice) {
+    public void setCurrentPrice(BigDecimal currentPrice) {
         this.currentPrice = currentPrice;
     }
 
