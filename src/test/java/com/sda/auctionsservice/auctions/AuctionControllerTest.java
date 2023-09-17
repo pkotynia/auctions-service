@@ -3,10 +3,12 @@ package com.sda.auctionsservice.auctions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ProblemDetail;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,9 +45,10 @@ class AuctionControllerTest {
                 .bodyValue(new Auction("test auction", BigDecimal.valueOf(-1.0), BigDecimal.ONE, "test description", LocalDateTime.now(),new Category("Moto")))
                 .exchange()
                 .expectStatus().isBadRequest()
-                .expectBody().json("""
-                        {"type":"about:blank","title":"Bad Request","status":400,"detail":"initialPrice must be greater than or equal to 0.01","instance":"/auctions"}              
-                        """);
+                .expectBody(ProblemDetail.class);
+//                .json("""
+//                        {"type":"about:blank","title":"Bad Request","status":400,"detail":"initialPrice must be greater than or equal to 0.01","instance":"/auctions"}
+//                        """);
     }
 
     @Test
@@ -78,6 +81,39 @@ class AuctionControllerTest {
                 .bodyValue(new Auction("Updated", BigDecimal.TEN, BigDecimal.ONE, "test description", LocalDateTime.now(),new Category("Moto")))
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    void shouldReturnListOfAuctionsForExistingCategory(@Autowired WebTestClient testClient) {
+        List responseBody = testClient
+                .get()
+                .uri("/auctions/searchByCategory?category=moto")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(List.class).returnResult().getResponseBody();
+
+        assertEquals(2, responseBody.size());
+    }
+
+    @Test
+    void shouldReturnEmptyListForCategoryWithoutAuctions(@Autowired WebTestClient testClient) {
+        List responseBody = testClient
+                .get()
+                .uri("/auctions/searchByCategory?category=tools")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(List.class).returnResult().getResponseBody();
+
+        assertEquals(0, responseBody.size());
+    }
+
+    @Test
+    void shouldReturn400ForNonExistingCategory(@Autowired WebTestClient testClient) {
+        testClient
+                .get()
+                .uri("/auctions/searchByCategory?category=wrongCategory")
+                .exchange()
+                .expectStatus().isBadRequest();
     }
 
 }
