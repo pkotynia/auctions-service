@@ -6,6 +6,7 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 //Deprecated do not ever use
+// import java.util.Date
 
 @Entity
 public class Auction {
@@ -30,14 +31,20 @@ public class Auction {
 
     private LocalDateTime endTime;
 
+    @NotNull
+    @ManyToOne()
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     public Auction() {}
 
-    public Auction(String name, BigDecimal initialPrice, BigDecimal currentPrice, String description, LocalDateTime endTime) {
+    public Auction(String name, BigDecimal initialPrice, BigDecimal currentPrice, String description, LocalDateTime endTime, Category category) {
         this.name = name;
         this.initialPrice = initialPrice;
         this.currentPrice = currentPrice;
         this.description = description;
         this.endTime = endTime;
+        this.category = category;
     }
 
     public Integer getId() {
@@ -86,6 +93,14 @@ public class Auction {
 
     public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     @Override

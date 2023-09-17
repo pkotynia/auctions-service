@@ -1,4 +1,10 @@
 DROP TABLE IF EXISTS auction;
+DROP TABLE IF EXISTS category;
+
+CREATE TABLE IF NOT EXISTS category (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE IF NOT EXISTS auction (
     id INT NOT NULL UNIQUE AUTO_INCREMENT,
@@ -6,7 +12,9 @@ CREATE TABLE IF NOT EXISTS auction (
     initial_price DECIMAL(6, 2) NOT NULL,
     current_price DECIMAL(6, 2),
     description VARCHAR(5000),
-    end_time DATETIME NOT NULL
+    end_time DATETIME NOT NULL,
+    category_id INT NOT NULL,
+    FOREIGN KEY (category_id) REFERENCES category(id)
 );
 
 DROP TABLE IF EXISTS seller;
@@ -21,4 +29,6 @@ CREATE TABLE IF NOT EXISTS seller_auction (
     seller_id INT,
     auction_id INT
 );
+
+
 
