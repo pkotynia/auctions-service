@@ -97,4 +97,17 @@ public class AuctionController {
         return auctionRepository.findAll();
     }
 
+    @GetMapping("/searchByCategory")
+    public List<Auction> getAuctionByCategory(@RequestParam("category") String categoryName) {
+        //find category by name
+        //find and return auctions by category
+        return auctionRepository
+                .findByCategory(getCategoryByNameOrElseThrowException(categoryName));
+    }
+
+    private Category getCategoryByNameOrElseThrowException(String categoryName) {
+        return categoryRepository.findByName(categoryName)
+                .orElseThrow(() -> new CategoryNotFoundException("Category " + categoryName + " not exist"));
+    }
+
 }
