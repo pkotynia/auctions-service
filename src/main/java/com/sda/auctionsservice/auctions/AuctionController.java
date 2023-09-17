@@ -1,6 +1,8 @@
 package com.sda.auctionsservice.auctions;
 
+import com.sda.auctionsservice.CategoryNotFoundException;
 import jakarta.validation.Valid;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -8,18 +10,38 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auctions")
 public class AuctionController {
 
-    private final AuctionRepository repository;
+    private final AuctionRepository auctionRepository;
+    private final CategoryRepository categoryRepository;
 
     //Spring will provide concrete implementation of AuctionRepository
-    public AuctionController(AuctionRepository repository) {
-        this.repository = repository;
+    public AuctionController(AuctionRepository auctionRepository, CategoryRepository categoryRepository) {
+        this.auctionRepository = auctionRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @PostMapping
     public Auction postAuction(@RequestBody @Valid Auction auction) {
+//        //check if category exists
+//        Optional<Category> categoryOptional = categoryRepository.findByName(auction.getCategory().getName());
+//
+//        //else throw category not exist exception
+//        Category category = categoryOptional.orElseThrow(() -> new ObjectNotFoundException(auction, "category not found"));
+//
+//        //if exists - set category on auction
+//        auction.setCategory(category);
+//
+//        return auctionRepository.save(auction);
 
-        return repository.save(auction);
+        return categoryRepository.findByName(auction.getCategory().getName())
+                .map(category -> setCategoryForAuction(auction, category))
+                .orElseThrow(() -> new CategoryNotFoundException("Category " + auction.getCategory().getName() + " not exist"));
     }
+
+    private Auction setCategoryForAuction(Auction auction, Category category) {
+        auction.setCategory(category);
+        return auctionRepository.save(auction);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAuction(@PathVariable int id) {
@@ -30,9 +52,9 @@ public class AuctionController {
 //            return ResponseEntity.notFound().build();
 //        }
 
-        return repository.findById(id)
+        return auctionRepository.findById(id)
                 .map(auction -> {
-                    repository.deleteById(id);
+                    auctionRepository.deleteById(id);
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }

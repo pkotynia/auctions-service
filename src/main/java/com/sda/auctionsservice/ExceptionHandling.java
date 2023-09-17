@@ -1,23 +1,23 @@
 package com.sda.auctionsservice;
 
-import jakarta.validation.ConstraintDeclarationException;
-import jakarta.validation.ConstraintViolationException;
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ExceptionHandling {
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ProblemDetail handleCategoryNotFoundException(CategoryNotFoundException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
 
     @ExceptionHandler(ObjectNotFoundException.class)
     public ProblemDetail handleObjectNotFoundException(ObjectNotFoundException exception){

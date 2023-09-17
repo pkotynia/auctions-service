@@ -10,6 +10,8 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// this is not very valid test it skips the Controller/Service layer where soem logic/validation is performed
+// this is useful only for checking the DB layer
 @SpringBootTest
 class SellerRepositoryTest {
 
@@ -19,10 +21,7 @@ class SellerRepositoryTest {
     @Test
     void shouldSaveAuction() {
         //given
-        Auction auction = new Auction("test auction", BigDecimal.ONE, BigDecimal.ONE, "test description", LocalDateTime.now());
-        Auction auction1 = new Auction("test auction1", BigDecimal.ONE, BigDecimal.ONE, "test description", LocalDateTime.now());
-        Set<Auction> auctions = Set.of(auction, auction1);
-        Seller bob = new Seller("Bob", auctions);
+        Seller bob = new Seller("Bob", Set.of());
 
         //when
         Seller saved = repository.save(bob);
