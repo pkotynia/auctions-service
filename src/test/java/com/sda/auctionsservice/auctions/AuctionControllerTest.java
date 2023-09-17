@@ -56,4 +56,28 @@ class AuctionControllerTest {
                 .exchange()
                 .expectStatus().isNoContent();
     }
+
+    @Test
+    void shouldUpdateAuction(@Autowired WebTestClient testClient) {
+        Auction updatedAuction = testClient
+                .put()
+                .uri("/auctions/1")
+                .bodyValue(new Auction("Updated", BigDecimal.TEN, BigDecimal.ONE, "test description", LocalDateTime.now(),new Category("Moto")))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Auction.class).returnResult().getResponseBody();
+
+        assertEquals("Updated", updatedAuction.getName());
+    }
+
+    @Test
+    void shouldReturn400whenUpdateAuctionWithWrongId(@Autowired WebTestClient testClient) {
+        testClient
+                .put()
+                .uri("/auctions/999")
+                .bodyValue(new Auction("Updated", BigDecimal.TEN, BigDecimal.ONE, "test description", LocalDateTime.now(),new Category("Moto")))
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
 }

@@ -6,6 +6,8 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/auctions")
 public class AuctionController {
@@ -42,6 +44,37 @@ public class AuctionController {
         return auctionRepository.save(auction);
     }
 
+    @PutMapping("/{id}")
+    public Auction updateAuction(@PathVariable int id, @RequestBody @Valid Auction updatedObject) {
+//        //fetch auction from repo by id
+//        Auction auctionFromRepo = auctionRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException(id, " auction not found"));
+//        //update auction object
+//        auctionFromRepo.setName(updatedObject.getName());
+//        auctionFromRepo.setCurrentPrice(updatedObject.getCurrentPrice());
+//        auctionFromRepo.setInitialPrice(updatedObject.getInitialPrice());
+//        auctionFromRepo.setDescription(updatedObject.getDescription());
+//        auctionFromRepo.setEndTime(updatedObject.getEndTime());
+//
+//        //save updated object
+//        return auctionRepository.save(auctionFromRepo);
+
+        return auctionRepository.save(findAuctionByIdAndUpdateFields(id, updatedObject));
+    }
+
+    private Auction findAuctionByIdAndUpdateFields(int id, Auction updatedObject) {
+        return auctionRepository.findById(id)
+                .map(auctionFromRepo -> updateAuction(updatedObject, auctionFromRepo))
+                .orElseThrow(() -> new ObjectNotFoundException(id, " auction not found"));
+    }
+
+    private static Auction updateAuction(Auction updatedObject, Auction auctionFromRepo) {
+        auctionFromRepo.setName(updatedObject.getName());
+        auctionFromRepo.setCurrentPrice(updatedObject.getCurrentPrice());
+        auctionFromRepo.setInitialPrice(updatedObject.getInitialPrice());
+        auctionFromRepo.setDescription(updatedObject.getDescription());
+        auctionFromRepo.setEndTime(updatedObject.getEndTime());
+        return auctionFromRepo;
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteAuction(@PathVariable int id) {
@@ -57,6 +90,11 @@ public class AuctionController {
                     auctionRepository.deleteById(id);
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public List<Auction> getAllAuctions() {
+        return auctionRepository.findAll();
     }
 
 }
