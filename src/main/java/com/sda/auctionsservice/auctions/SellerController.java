@@ -17,6 +17,7 @@ public class SellerController {
         this.repository = repository;
     }
 
+    //TODO - refactor this code and create service layer
     @PostMapping
     public Seller createSeller(@RequestBody @Valid Seller seller) {
         return repository.save(seller);
