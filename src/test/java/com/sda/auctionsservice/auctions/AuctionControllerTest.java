@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ProblemDetail;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class AuctionControllerTest {
 
     @Test
@@ -21,6 +23,7 @@ class AuctionControllerTest {
                 .post()
                 .uri("/auctions")
                 .bodyValue(new Auction("test auction", BigDecimal.ONE, BigDecimal.ONE, "test description", LocalDateTime.now(), new Category("Moto")))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isOk();
     }
@@ -31,6 +34,7 @@ class AuctionControllerTest {
                 .post()
                 .uri("/auctions")
                 .bodyValue(new Auction("test auction", BigDecimal.ONE, BigDecimal.ONE, "test description", LocalDateTime.now(), new Category("Non Existing Category")))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody().json("""
@@ -43,6 +47,7 @@ class AuctionControllerTest {
                 .post()
                 .uri("/auctions")
                 .bodyValue(new Auction("test auction", BigDecimal.valueOf(-1.0), BigDecimal.ONE, "test description", LocalDateTime.now(),new Category("Moto")))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isBadRequest()
                 .expectBody(ProblemDetail.class);
@@ -56,6 +61,7 @@ class AuctionControllerTest {
         testClient
                 .delete()
                 .uri("/auctions/1")
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -66,6 +72,7 @@ class AuctionControllerTest {
                 .put()
                 .uri("/auctions/1")
                 .bodyValue(new Auction("Updated", BigDecimal.TEN, BigDecimal.ONE, "test description", LocalDateTime.now(),new Category("Moto")))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(Auction.class).returnResult().getResponseBody();
@@ -79,6 +86,7 @@ class AuctionControllerTest {
                 .put()
                 .uri("/auctions/999")
                 .bodyValue(new Auction("Updated", BigDecimal.TEN, BigDecimal.ONE, "test description", LocalDateTime.now(),new Category("Moto")))
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isNotFound();
     }
@@ -88,6 +96,7 @@ class AuctionControllerTest {
         List responseBody = testClient
                 .get()
                 .uri("/auctions/searchByCategory?category=moto")
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(List.class).returnResult().getResponseBody();
@@ -100,6 +109,7 @@ class AuctionControllerTest {
         List responseBody = testClient
                 .get()
                 .uri("/auctions/searchByCategory?category=tools")
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(List.class).returnResult().getResponseBody();
@@ -112,6 +122,7 @@ class AuctionControllerTest {
         testClient
                 .get()
                 .uri("/auctions/searchByCategory?category=wrongCategory")
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
                 .exchange()
                 .expectStatus().isBadRequest();
     }

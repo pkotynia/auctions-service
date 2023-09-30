@@ -44,6 +44,11 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
 <!--		adds suport for openapi documentation
 		URL: http://localhost:8080/swagger-ui/index.html#/-->
 		<dependency>
