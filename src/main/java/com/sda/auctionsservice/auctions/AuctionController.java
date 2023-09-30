@@ -46,4 +46,9 @@ public class AuctionController {
         return service.getAuctionByCategory(categoryName);
     }
 
+    @GetMapping("/search")
+    public List<Auction> getAuctionsByString(@RequestParam("query") String query) {
+        return service.getAuctionsByQueryString(query);
+    }
+
 }

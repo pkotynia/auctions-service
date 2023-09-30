@@ -18,6 +18,16 @@ import static org.junit.jupiter.api.Assertions.*;
 class AuctionControllerTest {
 
     @Test
+    void shouldFindAuctionByQuery(@Autowired WebTestClient testClient) {
+        testClient
+                .get()
+                .uri("/auctions/search?query=opla%20sprzedam")
+                .headers(headersConsumer -> headersConsumer.setBasicAuth("user", "password"))
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
     void shouldAddAuctionToDb(@Autowired WebTestClient testClient) {
         testClient
                 .post()

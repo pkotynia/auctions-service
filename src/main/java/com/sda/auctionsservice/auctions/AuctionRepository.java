@@ -1,6 +1,7 @@
 package com.sda.auctionsservice.auctions;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -15,4 +16,8 @@ public interface AuctionRepository extends JpaRepository<Auction, Integer> {
     // of Auction findById(Integer id);
 
     List<Auction> findByCategory(Category category);
+
+//    @Query(value = "Select * FROM auction a WHERE a.name LIKE %:query% or a.description LIKE %:query% ", nativeQuery = true)
+    @Query(value = "Select a FROM Auction a WHERE a.name LIKE %:query% or a.description LIKE %:query% ")
+    List<Auction> findAuctionBy(String query);
 }
