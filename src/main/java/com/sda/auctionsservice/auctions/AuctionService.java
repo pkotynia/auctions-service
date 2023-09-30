@@ -97,6 +97,9 @@ public class AuctionService {
                 .orElseThrow(() -> new CategoryNotFoundException("Category " + categoryName + " not exist"));
     }
 
+    List<Auction> getAuctionsByQueryString(String query) {
+        return auctionRepository.findAuctionBy(query);
+    }
 
 
 }

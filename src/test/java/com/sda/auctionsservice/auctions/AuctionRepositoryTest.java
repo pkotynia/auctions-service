@@ -29,4 +29,12 @@ class AuctionRepositoryTest {
         assertEquals(2, res.size());
     }
 
+    @Test
+    void shouldFindAuctionByQueryString() {
+
+        List<Auction> auctions = auctionRepository.findAuctionBy("toyota");
+
+        assertEquals(1, auctions.size());
+    }
+
 }
