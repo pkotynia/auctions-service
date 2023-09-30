@@ -11,4 +11,7 @@ INSERT INTO seller(name) VALUES("Janusz");
 INSERT INTO seller_auction(seller_id, auction_id) VALUES(1,1);
 INSERT INTO seller_auction(seller_id, auction_id) VALUES(1,2);
 
+INSERT INTO users VALUES (1, "user1", "password", 1);
+INSERT INTO authorities VALUES (1, "user1", "USER")
+
 
