@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface AuctionRepository extends JpaRepository<Auction, Integer> {
 
-    //currently we have implicitly all the metods from JpaRepository and extended repositories available
+    //currently we have implicitly all the methods from JpaRepository and extended repositories available
     // for example Auction save(Auction entity);
     // of Auction findById(Integer id);
 

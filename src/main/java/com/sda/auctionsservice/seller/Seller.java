@@ -1,5 +1,6 @@
-package com.sda.auctionsservice.auctions;
+package com.sda.auctionsservice.seller;
 
+import com.sda.auctionsservice.auctions.Auction;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

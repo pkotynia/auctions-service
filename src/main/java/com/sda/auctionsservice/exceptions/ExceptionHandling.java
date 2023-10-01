@@ -1,4 +1,4 @@
-package com.sda.auctionsservice;
+package com.sda.auctionsservice.exceptions;
 
 import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;

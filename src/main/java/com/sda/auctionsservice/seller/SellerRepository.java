@@ -1,4 +1,4 @@
-package com.sda.auctionsservice.auctions;
+package com.sda.auctionsservice.seller;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

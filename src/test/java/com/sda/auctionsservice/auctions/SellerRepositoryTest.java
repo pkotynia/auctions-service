@@ -1,11 +1,11 @@
 package com.sda.auctionsservice.auctions;
 
+import com.sda.auctionsservice.seller.Seller;
+import com.sda.auctionsservice.seller.SellerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -8,14 +8,15 @@ import java.time.LocalDateTime;
 //Deprecated do not ever use
 // import java.util.Date
 
-@Entity
+@Entity // class represent table in DB (can be seen in schema validation errors :) )
+// object represent a single row from table
 public class Auction {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id // Every entity requires unique id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // defining way of generating public key - IDENTITY works well with MySQL
     private Integer id;
 
-    @NotNull
+    @NotNull // validation annotations form Hibernate Validator
     @NotEmpty
     private String name;
 
@@ -31,13 +32,18 @@ public class Auction {
 
     private LocalDateTime endTime;
 
+    // Many Auctions can have one category
+    // From DataBase perspective we have column named category_it to store the information about id of the category
     @NotNull
     @ManyToOne()
     @JoinColumn(name = "category_id")
     private Category category;
 
+    // this constructor is necessary for Hibernate to create object
+    // it is important to provide this constructor in case we have implemented constructor with params
     public Auction() {}
 
+    // this constructor is for our convenience mostly in testing
     public Auction(String name, BigDecimal initialPrice, BigDecimal currentPrice, String description, LocalDateTime endTime, Category category) {
         this.name = name;
         this.initialPrice = initialPrice;
