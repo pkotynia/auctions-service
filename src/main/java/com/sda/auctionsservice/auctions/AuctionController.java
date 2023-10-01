@@ -1,25 +1,39 @@
 package com.sda.auctionsservice.auctions;
 
-import com.sda.auctionsservice.CategoryNotFoundException;
 import jakarta.validation.Valid;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * this controller is an entry point for handling CRUD operation on Auctions
+ *
+ * RestController = Controller(notifies Spring about defined endpoints) + ResponseBody(converts return types form methods into JSONs)
+ * RequestMapping defines main endpoint for this controller
+ */
 @RestController
 @RequestMapping("/auctions")
 public class AuctionController {
 
     private final AuctionService service;
 
-    //Spring will provide concrete implementation of AuctionRepository
-    public AuctionController(AuctionService service, AuctionRepository auctionRepository, CategoryRepository categoryRepository) {
+    // Dependency injection of service object
+    public AuctionController(AuctionService service) {
         this.service = service;
     }
 
-    @PostMapping
+    /**
+     * 1. receives HTTP request type Post with request body containing JSON format of Auction abject
+     * 2. JSON is converted into Auction object (@RequestBody)
+     * 3. Validation is performed base on Hibernate Validator annotation in Auction Object (@Valid)
+     * 4. Auction is saved AuctionsService.saveAuction() -> AuctionRepository.save()
+     * 5. Saved Auction object is returned
+     *
+     * @param auction - auction to be saved
+     * @return saved auction
+     */
+    @PostMapping // defines HTTP request type
     public Auction postAuction(@RequestBody @Valid Auction auction) {
         return service.saveAuction(auction);
     }

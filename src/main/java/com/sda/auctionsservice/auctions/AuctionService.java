@@ -1,23 +1,31 @@
 package com.sda.auctionsservice.auctions;
 
-import com.sda.auctionsservice.CategoryNotFoundException;
+import com.sda.auctionsservice.exceptions.CategoryNotFoundException;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service // this annotation is telling spring that this is a component and should be included in spring context during app startup
 public class AuctionService {
 
+    // this is an example of has-a (composition) relation
     private final AuctionRepository auctionRepository;
+
+//    @Autowired - code smell, this method is not recommended - makes testing harder
     private final CategoryRepository categoryRepository;
 
+    // implicit autowired operation done by spring. No need to provide @Autowire annotation
     public AuctionService(AuctionRepository auctionRepository, CategoryRepository categoryRepository) {
         this.auctionRepository = auctionRepository;
         this.categoryRepository = categoryRepository;
     }
 
+    // In service we provide methods that are then ussed by Controllers
+    //Methods should contain business logic
+    //we are using default access modifier, only classes form current package will be able to access this method
     Auction saveAuction(Auction auction) {
 //        check if category exists
 //        Optional<Category> categoryOptional = categoryRepository.findByName(auction.getCategory().getName());

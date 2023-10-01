@@ -1,4 +1,4 @@
-package com.sda.auctionsservice;
+package com.sda.auctionsservice.exceptions;
 
 public class CategoryNotFoundException extends RuntimeException {
 
